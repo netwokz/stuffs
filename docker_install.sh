@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env sh
 
 # check if not running as root
 test "$UID" -gt 0 || { info "don't run this as root!"; exit; }
