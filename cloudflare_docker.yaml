@@ -1,6 +1,0 @@
-services:
-  cloudflared:
-  image: cloudflare/cloudflared
-  container_name: cloudflared
-  restart: always
-  command: tunnel run --token eyJhIjoiNTg2OGU2NGQ4N2U2YWMzOWU5NTc1YzBkMDQ0ZTQ5MGIiLCJ0IjoiOWNmNDVhNGItMGE2Yi00ZWIxLWJmZGYtMzNjZGMxYjhmNzQxIiwicyI6Ik9UWmhOemcwWXpndFkyVXdPUzAwWm1VeExUZzNaVFl0TURWbFpHRXlaREptT1RFMiJ9
