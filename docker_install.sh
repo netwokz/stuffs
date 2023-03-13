@@ -1,4 +1,4 @@
-#! /usr/bin/env sh
+#! /bin/bash
 
 # check if not running as root
 test "$UID" -gt 0 || { info "don't run this as root!"; exit; }
@@ -7,23 +7,22 @@ test "$UID" -gt 0 || { info "don't run this as root!"; exit; }
 info "setting / verifying sudo timestamp"
 sudo -v
 
-sudo apt install -y ca-certificates curl gnupg lsb-release
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
 
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo apt install -y docker-ce
 
-curl -sL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+sudo usermod -aG docker ${USER}
 
-sudo apt install -y docker-ce-rootless-extras
+su - ${USER}
 
-sudo apt install uidmap
+mkdir -p ~/.docker/cli-plugins/
 
-dockerd-rootless-setuptool.sh install
+curl -SL https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
 
+chmod +x ~/.docker/cli-plugins/docker-compose
 
