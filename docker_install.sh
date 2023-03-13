@@ -7,6 +7,8 @@ test "$UID" -gt 0 || { info "don't run this as root!"; exit; }
 info "setting / verifying sudo timestamp"
 sudo -v
 
+sudo apt update
+
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
