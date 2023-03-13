@@ -9,7 +9,7 @@ sudo -v
 
 sudo apt update
 
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
+sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
@@ -20,11 +20,11 @@ sudo apt install -y docker-ce
 
 sudo usermod -aG docker ${USER}
 
-su - ${USER}
-
 mkdir -p ~/.docker/cli-plugins/
 
 curl -SL https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
 
 chmod +x ~/.docker/cli-plugins/docker-compose
+
+
 
