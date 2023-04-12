@@ -10,7 +10,7 @@ from influxdb_client.rest import ApiException
 Define credentials
 """
 my_url = "https://influx.computeerror.com/"
-my_token = "Pt7t1hM2DfVtaa0yXGWZpD6vImylaJC8aIFUEYOC6ISVJeDRlw4Luvq2gqLDu-1vVft_GGe1_J2xToWkuhVRxg=="
+my_token = ""
 my_org = "home-server"
 my_bucket = "bucket01"
 
@@ -69,7 +69,13 @@ def get_items():
         """
         Query: using Table structure
         """
-        tables = client.query_api().query('from(bucket:"bucket01") |> range(start: -10m) |> filter(fn: (r) => r["_measurement"] == "sensors")\
+        tables = client.query_api().query('from(bucket:"bucket01")\
+                                           |> range(start: -10m)\
+                                           |> filter(fn: (r) => r["_measurement"] == "sensors")\
+                                           |> filter(fn: (r) => r["_field"] == "temp_input")\
+                                           |> filter(fn: (r) => r["chip"] == "coretemp-isa-0000")\
+                                           |> filter(fn: (r) => r["feature"] == "package_id_0")\
+                                           |> filter(fn: (r) => r["host"] == "pve")\
                                            |> last()')
 
         count = 0
@@ -78,7 +84,7 @@ def get_items():
                 count += 1
                 # print(record.values)
                 # print(record["_time"])
-                print(f'{count}: {record["feature"]}')
+                print(f'{record["_time"]}: {record["feature"]} - {record["_value"]}')
                 # print(record["_value"])
     except ApiException as e:
         # missing credentials
