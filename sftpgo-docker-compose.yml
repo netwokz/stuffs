@@ -1,0 +1,44 @@
+version: "3"
+services:
+  sftpgo:
+    image: "drakkan/sftpgo:v2-alpine"
+    # default user id
+    user: 1026
+    restart: always
+    expose:
+      # HTTP
+      - "8080"
+      # HTTPS
+      - "443"
+      # WebDav
+      - "5007"
+    environment:
+      # These are the settings to access your db
+      SFTPGO_WEBDAVD__BINDINGS__0__PORT: 5007
+      SFTPGO_DATA_PROVIDER__DRIVER: "mysql"
+      SFTPGO_DATA_PROVIDER__NAME: "sftpgo"
+      SFTPGO_DATA_PROVIDER__HOST: "mysql"
+      SFTPGO_DATA_PROVIDER__PORT: 3306
+      SFTPGO_DATA_PROVIDER__USERNAME: "<SQL_USER>"
+      SFTPGO_DATA_PROVIDER__PASSWORD: "<SQL_PASS>"
+      SFTPGO_COMMON_DEFENDER__ENABLED: "true"
+      SFTPGO_COMMON_DEFENDER__BAN_TIME: 15
+      SFTPGO_COMMON_DEFENDER__BAN_TIME_INCREMENT: 100
+      SFTPGO_COMMON_DEFENDER__THRESHOLD: 5
+      SFTPGO_COMMON_DEFENDER__OBSERVATION_TIME: 15
+    volumes:
+      - ./:/srv/sftpgo
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: "sftpgo"
+      MYSQL_USER: "<SQL_USER>"
+      MYSQL_PASSWORD: "<SQL_PASS>"
+      MYSQL_ROOT_PASSWORD: "<SQL_ROOT_PASS>"
+    volumes:
+      - ./database:/var/lib/mysql
+networks:
+  default:
+    external:
+      name: nginx-proxy-manager_default
